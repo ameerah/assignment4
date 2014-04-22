@@ -41,26 +41,28 @@ public class Queue
       int leftIndex;
       int rightIndex;
       Patient lastEntry = patientQueue[(spotsFilled - 1)];
-      patientQueue[(spotsFilled - 1)] = null;
       
-      for (int i = 0; i == (spotsFilled - 1); i++)
+      for (int i = 0; i <= 9; i++)
       {
-         System.out.println(patientQueue[i].getUrgency());
+         if (patientQueue[i] != null)
+         {
+            System.out.println((i+1)+". "+patientQueue[i].getUrgency());
+         }
       }
-      
+            
       while (deleted == false)
       {
          // note: deletion only occurs once all nodes have percolated upwards and we arrive at the last node (which is empty) and insert the rightmost entry on the final level
          // therefore set "deleted = true" at place of insertion of lastEntry
          
-         // could produce out of bounds exception if indices > 99
+         // could produce out of bounds exception if indices > 9
          leftIndex = parentIndex*2 + 1;
          rightIndex = parentIndex*2 + 2;
          
          // in the case where both are out of bounds, we have a situation where the node has no children
          // left index being out of bounds implies that right index is too
          // we simply execute the case where it has no children, described below
-         if (leftIndex > 99)
+         if (leftIndex > 9)
          {
             // here we just need to assign the last entry here as this node would already had to have percolated upwards to be reached
             patientQueue[parentIndex] = lastEntry;
@@ -70,10 +72,10 @@ public class Queue
          // in the case where the right one is out of bounds and the left one isn't, the left child must be of index 99
          // this means we must execute the case where we assign the left child to the parent node (percolating it up)
          // it's left child will have no children so we may as well assign the left child null at thi stage and then end
-         else if (leftIndex == 99)
+         else if (leftIndex == 9)
          {
-            patientQueue[parentIndex] = patientQueue[99];
-            patientQueue[99] = null;
+            patientQueue[parentIndex] = patientQueue[9];
+            patientQueue[9] = null;
             deleted = true;
          }
          
@@ -130,12 +132,10 @@ public class Queue
          }
       }
       
-      for (int i = 0; i == (spotsFilled - 1); i++)
-      {
-         System.out.println(i + ". " + patientQueue[i].getUrgency());
-      }
-      
+      patientQueue[(spotsFilled - 1)] = null;
+         
       spotsFilled = spotsFilled - 1;
+
    }
    
    public Patient[] getQueueArray()
@@ -146,7 +146,7 @@ public class Queue
    // constructor   
    public Queue()
    {
-      patientQueue = new Patient[100];
+      patientQueue = new Patient[10];
       Patient initialise = new Patient("", "", 0, 0);
       patientQueue[0] = initialise;
    }

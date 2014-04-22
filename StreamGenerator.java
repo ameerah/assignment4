@@ -26,7 +26,7 @@ public class StreamGenerator
       
       Patient person = null;
       
-      for (int i = 1; i <= 100; i++)
+      for (int i = 1; i <= 10; i++)
       {
          urgency = urgencyGenerator.nextInt(50) + 1; // change in pain ranking
          nameNum = nameGenerator.nextInt(100);
@@ -43,10 +43,10 @@ public class StreamGenerator
    
    public void treatPatients()
    {
-      //for (int i = 0; i == 99; i++)
-      //{
+      for (int i = 0; i <= 9; i++)
+      {
          patientQueue.treatPatient();
-      //}
+      }
    }
    
    public String getName(int index, String searchFile)
