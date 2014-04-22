@@ -36,7 +36,30 @@ public class Queue
    
    public void treatPatients()
    {
+      boolean deleted = false;
+      int parentIndex = 0;
+      int leftIndex;
+      int rightIndex;
+      Patient lastEntry = patientQueue[(spotsFilled - 1)];
       
+      while (deleted == false)
+      {
+         leftIndex = parentIndex*2 + 1;
+         rightIndex = parentIndex*2 + 2;
+         
+         if ( patientQueue[leftIndex].getUrgency() <= patientQueue[rightIndex].getUrgency())
+         {
+            patientQueue[parentIndex] = patientQueue[leftIndex];
+            parentIndex = leftIndex;
+         }
+         else
+         {
+            patientQueue[parentIndex] = patientQueue[rightIndex];
+            parentIndex = rightIndex;
+         }
+      }
+      
+      spotsFilled = spotsFilled - 1;
    }
    
    // constructor   
