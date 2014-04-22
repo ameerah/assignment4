@@ -42,100 +42,91 @@ public class Queue
       int rightIndex;
       Patient lastEntry = patientQueue[(spotsFilled - 1)];
       
-      for (int i = 0; i <= 9; i++)
+      // printing method
+      for (int i = 0; i <= (spotsFilled - 1); i++)
       {
          if (patientQueue[i] != null)
          {
-            System.out.println((i+1)+". "+patientQueue[i].getUrgency());
+            System.out.println((i+1)+". "+ patientQueue[i].getUrgency());
          }
       }
-            
+      
+      // while the deletion process has not completed (completion decided when we reach a node with no children)
       while (deleted == false)
       {
-         // note: deletion only occurs once all nodes have percolated upwards and we arrive at the last node (which is empty) and insert the rightmost entry on the final level
-         // therefore set "deleted = true" at place of insertion of lastEntry
+         leftIndex = 2*parentIndex + 1;
+         rightIndex = 2*parentIndex + 2;
          
-         // could produce out of bounds exception if indices > 9
-         leftIndex = parentIndex*2 + 1;
-         rightIndex = parentIndex*2 + 2;
-         
-         // in the case where both are out of bounds, we have a situation where the node has no children
-         // left index being out of bounds implies that right index is too
-         // we simply execute the case where it has no children, described below
-         if (leftIndex > 9)
+         // does this node have a left child? (not null, within bounds)
+         // yes: check for right child
+         // no: implies there can't be no right child because binary heaps fill from left to right; therefore: stand-alone node
+         if ((leftIndex <= 9)&&(patientQueue[leftIndex] != null)) // within bounds and non-empty
          {
-            // here we just need to assign the last entry here as this node would already had to have percolated upwards to be reached
-            patientQueue[parentIndex] = lastEntry;
-            deleted = true;
-         }
-         
-         // in the case where the right one is out of bounds and the left one isn't, the left child must be of index 99
-         // this means we must execute the case where we assign the left child to the parent node (percolating it up)
-         // it's left child will have no children so we may as well assign the left child null at thi stage and then end
-         else if (leftIndex == 9)
-         {
-            patientQueue[parentIndex] = patientQueue[9];
-            patientQueue[9] = null;
-            deleted = true;
-         }
-         
-         // the case where left is out of bounds but right isnt doesn't exist since left index is always 1 less than right index
-         
-         
-         // if both child nodes exists and are within bounds
-         // reaching this statement predicates that they're within bounds or one of the previous statements would have executed
-         else if ((patientQueue[leftIndex]!=null)&&(patientQueue[rightIndex]!=null))
-         {
-            if ( patientQueue[leftIndex].getUrgency() <= patientQueue[rightIndex].getUrgency())
+            // has non-empty left node within bounds
+            // does it have a right node?
+            if ((rightIndex > 9)||(patientQueue[rightIndex] == null))
             {
+               // right node is out of bounds or empty
+               // leaves left node to percolate up
                patientQueue[parentIndex] = patientQueue[leftIndex];
-               patientQueue[leftIndex] = null;
                parentIndex = leftIndex;
+               patientQueue[leftIndex] = null;
             }
             else
             {
-               patientQueue[parentIndex] = patientQueue[rightIndex];
-               patientQueue[rightIndex] = null;
-               parentIndex = rightIndex;
+               // has a right node
+               // consider which node is more urgent
+               if (patientQueue[leftIndex].getUrgency() <= patientQueue[rightIndex].getUrgency())
+               {
+                  // left is more urgent or of equal urgency
+                  // therefore left percolates up
+                  patientQueue[parentIndex] = patientQueue[leftIndex];
+                  patientQueue[leftIndex] = null;
+                  parentIndex = leftIndex;
+               }
+               else
+               {
+                  // right is more urgent or of equal urgency
+                  // therefore rigth percolates up
+                  patientQueue[parentIndex] = patientQueue[rightIndex];
+                  patientQueue[rightIndex] = null;
+                  parentIndex = rightIndex;
+               }
             }
          }
-         // else if the left one exists but not the right one; statement only includes existence of left one because previous statement predicates that not both of them exist
-         else if(patientQueue[leftIndex]!=null)
+         else // has no left child therefore no right child
          {
-            patientQueue[parentIndex] = patientQueue[leftIndex];
-            patientQueue[leftIndex] = null;
-            parentIndex = leftIndex;
-         }
-         // else if the right one exists but not the left one
-         else if(patientQueue[rightIndex]!=null)
-         {
-            patientQueue[parentIndex] = patientQueue[rightIndex];
-            patientQueue[rightIndex] = null;
-            parentIndex = rightIndex;
-         }
-         // else (i.e. neither exists)
-         // this means the entries in the heap have percolated up and we have a situation where either:
-         // A: this node is null (been deleted / percolated upward) so we assign the last entry here
-         // or B: this is the final node to be deleted; i.e. not null and needing to be assigned null; it IS the lastEntry
-         else
-         {
-            if (patientQueue[parentIndex] == null)
+            // is it root?
+            if (parentIndex == 0)
             {
-               patientQueue[parentIndex] = lastEntry;
+               // root with no children implies last patient to be treated
+               patientQueue[0] = null;
                deleted = true;
             }
             else
             {
-               patientQueue[parentIndex] = null;
-               deleted = true;
+               // not root. no children => all nodes below it have percolated up
+               // does this mean the final node that would usually be inserted at this end was percolated up?
+               if (parentIndex == (spotsFilled - 1))
+               {
+                  // spots filled = number of non-empty array items; less one gives the index of where the rightmost node on the lowest level is
+                  // in this scenario, the node we're looking at is where the node that shifts would have been
+                  // already been percolated up so no need to do anything else here
+                  deleted = true;
+               }
+               else
+               {
+                  // not root but not where the rightmost node is
+                  // the rightmost node now needs to be moved here to maintain binary heap structure
+                  patientQueue[parentIndex] = lastEntry;
+                  patientQueue[(spotsFilled-1)] = null;
+                  deleted = true;
+               }
             }
          }
       }
       
-      patientQueue[(spotsFilled - 1)] = null;
-         
       spotsFilled = spotsFilled - 1;
-
    }
    
    public Patient[] getQueueArray()
