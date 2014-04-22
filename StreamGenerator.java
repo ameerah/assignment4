@@ -41,6 +41,14 @@ public class StreamGenerator
       }
    }
    
+   public void treatPatients()
+   {
+      //for (int i = 0; i == 99; i++)
+      //{
+         patientQueue.treatPatient();
+      //}
+   }
+   
    public String getName(int index, String searchFile)
    {
       Scanner fileInput = null;
@@ -64,10 +72,5 @@ public class StreamGenerator
       fileInput.close();
       
       return line;
-   }
-   
-   public Queue getQueue()
-   {
-      return patientQueue;
    }
 }

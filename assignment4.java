@@ -9,5 +9,6 @@ public class assignment4
    {
       StreamGenerator sg = new StreamGenerator();
       sg.createQueue();
+      sg.treatPatients();
    }
 }
