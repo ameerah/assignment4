@@ -1,29 +1,37 @@
+// Class that has queue functions: e.g. adding a patient to the queue, dequeueing the patient
+
 import java.lang.Math;
 
 public class Queue
 {
    Patient[] patientQueue;
-   static int spotsFilled = 0;
+   static int spotsFilled = 0; // counts how many non-empty Patient items there are in the array; initialised at zero since nobody is added yet
    
    public void insertPatient(Patient newPerson)
    {
+      // method to queue patients 
+      // binary heap, array implementation
+      
       boolean inserted = false;
       int parentIndex;
-      int childIndex = spotsFilled;
+      int childIndex = spotsFilled; // child (patient to be queued) initially starts at the end
       Patient parent = null;
       int urgency = newPerson.getUrgency();
       
+      // inserts at rightmost position on lowest level then percolates up
       while (inserted == false)
       {
-         parentIndex = (int) Math.floor((childIndex-1)/2);
+         parentIndex = (int) Math.floor((childIndex-1)/2); // works out where parent is located in the array
          parent = patientQueue[parentIndex];
-                  
+         
+         // if the inserted patient is more urgent than it's current parent, percolate up         
          if (urgency < patientQueue[parentIndex].getUrgency())
          {
             patientQueue[parentIndex] = newPerson;
             patientQueue[childIndex] = parent;
             childIndex = parentIndex;
          }
+         // inerted patient is less urgent than parent; stay where it is
          else
          {
             patientQueue[childIndex] = newPerson;
@@ -42,14 +50,30 @@ public class Queue
       int rightIndex;
       Patient lastEntry = patientQueue[(spotsFilled - 1)];
       
-      // printing method
-      for (int i = 0; i <= (spotsFilled - 1); i++)
+      // printing output
+      String name = patientQueue[0].getName();
+      String surname = patientQueue[0].getSurname();
+      long ID = patientQueue[0].getID();
+      int urgency = patientQueue[0].getUrgency();
+      String colour = patientQueue[0].getColour();
+      
+      System.out.println(".......................................................................");
+      //System.out.println("Now treating Patient ID "+ID+": "+name+" "+surname+". Code: "+colour+".");
+      System.out.println("Now treating Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
+      System.out.println("In the queue:");
+      
+      for (int i = 1; i <= (spotsFilled - 1); i++)
       {
-         if (patientQueue[i] != null)
-         {
-            System.out.println((i+1)+". "+ patientQueue[i].getUrgency());
-         }
+         name = patientQueue[i].getName();
+         surname = patientQueue[i].getSurname();
+         ID = patientQueue[i].getID();
+         urgency = patientQueue[i].getUrgency();
+         colour = patientQueue[i].getColour();
+         
+         System.out.println((i)+". Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
       }
+      System.out.println("The doctor(s) will see to you shortly.\n");
+      System.out.println(".......................................................................");
       
       // while the deletion process has not completed (completion decided when we reach a node with no children)
       while (deleted == false)
@@ -127,11 +151,6 @@ public class Queue
       }
       
       spotsFilled = spotsFilled - 1;
-   }
-   
-   public Patient[] getQueueArray()
-   {
-      return patientQueue;
    }
    
    // constructor   

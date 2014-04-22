@@ -7,6 +7,7 @@ public class assignment4
 {
    public static void main(String[] args)
    {
+      // object that creates stream and handles stream
       StreamGenerator sg = new StreamGenerator();
       sg.createQueue();
       sg.treatPatients();
