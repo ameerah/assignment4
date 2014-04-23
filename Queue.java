@@ -42,6 +42,19 @@ public class Queue
       spotsFilled += 1;
    }
    
+   // creates duplicate of the same heap
+   public Patient[] clonePatients()
+   {
+      // need one exact copy for one heap, three doctors modification
+      Patient[] clone = new Patient[10];
+      for (int i = 0; i <= 9; i++)
+      {
+         clone[i] = patientQueue[i];
+      }
+      
+      return clone;
+   }
+   
    public void treatPatient()
    {
       boolean deleted = false;
@@ -50,6 +63,7 @@ public class Queue
       int rightIndex;
       Patient lastEntry = patientQueue[(spotsFilled - 1)];
       
+      /**
       // printing output
       String name = patientQueue[0].getName();
       String surname = patientQueue[0].getSurname();
@@ -73,7 +87,7 @@ public class Queue
          System.out.println((i)+". Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
       }
       System.out.println("The doctor(s) will see to you shortly.\n");
-      System.out.println(".......................................................................");
+      System.out.println(".......................................................................");**/
       
       // while the deletion process has not completed (completion decided when we reach a node with no children)
       while (deleted == false)
@@ -153,11 +167,19 @@ public class Queue
       spotsFilled = spotsFilled - 1;
    }
    
-   // constructor   
+   // constructors   
    public Queue()
    {
+      // constructor for first instantiation of queue when no patients have been added yet
       patientQueue = new Patient[10];
       Patient initialise = new Patient("", "", 0, 0);
       patientQueue[0] = initialise;
+   }
+   
+   public Queue(Patient[] duplicateArray, int num)
+   {
+      // creates duplicate queue for one heap, three doctors modification
+      patientQueue = duplicateArray;
+      spotsFilled = num;
    }
 }

@@ -1,4 +1,4 @@
-// Helper class; explicitly handles the queue
+// Helper class; explicitly handles the queue and creates multiple streams (duplicates) for different modifications
 
 import java.util.Random;
 import java.util.Scanner;
@@ -7,7 +7,13 @@ import java.io.FileNotFoundException;
 
 public class StreamGenerator
 {
-   Queue patientQueue = new Queue();
+   Queue patientQueue = new Queue(); // initial queue: one heap, one doctor
+   Queue modQueue = null; // first modification queue: one heap, three doctors
+   
+   // three queues for three heaps, three doctors modification
+   Queue redQueue = null;
+   Queue yellowQueue = null;
+   Queue greenQueue = null;
    
    // method to make the queue
    public void createQueue()
@@ -57,6 +63,50 @@ public class StreamGenerator
          // inserts person into binary heap (queue)
          patientQueue.insertPatient(person);
       }
+   }
+   
+   public void generateAdditionalQueues()
+   {
+      // One heap, three doctors mod
+      // copy the array from the already instantiated queue; construct new queue with same array
+      Patient[] clone = patientQueue.clonePatients();
+      modQueue = new Queue(clone, 10);
+      
+      // take this copy and split into three different queues
+      int r = 0;
+      Patient[] redArray = new Patient[10];
+      
+      int y = 0;
+      Patient[] yellowArray = new Patient[10];
+      
+      int g = 0;
+      Patient[] greenArray = new Patient[10];
+      
+      // so for every item in the clone, find its colour and put it into an array for that colour
+      for (int i = 0; i <= 9; i++)
+      {
+         if (clone[i].getColour() == "RED")
+         {
+            redArray[r] = clone[i];
+            r += 1;
+         }
+         else if (clone[i].getColour() == "YELLOW")
+         {
+            yellowArray[r] = clone[i];
+            y += 1;
+         }
+         else
+         {
+            greenArray[r] = clone[i];
+            g += 1;
+         }
+      }
+      
+      // create instances of these three queues using the arrays generated above 
+      redQueue = new Queue(redArray, r);
+      yellowQueue = new Queue(yellowArray, y);
+      greenQueue = new Queue(greenArray, g);
+      
    }
    
    public void treatPatients()
