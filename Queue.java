@@ -104,22 +104,7 @@ public class Queue
       int urgency = patientQueue[0].getUrgency();
       String colour = patientQueue[0].getColour();
       
-      //System.out.println(".......................................................................");
-      //System.out.println("Now treating Patient ID "+ID+": "+name+" "+surname+". Code: "+colour+".");
       System.out.println("Now treating Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
-      
-      /**for (int i = 1; i <= (spotsFilled - 1); i++)
-      {
-         name = patientQueue[i].getName();
-         surname = patientQueue[i].getSurname();
-         ID = patientQueue[i].getID();
-         urgency = patientQueue[i].getUrgency();
-         colour = patientQueue[i].getColour();
-         
-         System.out.println((i)+". Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
-      }
-      System.out.println("The doctor(s) will see to you shortly.\n");**/
-      //System.out.println(".......................................................................");
       
       // while the deletion process has not completed (completion decided when we reach a node with no children)
       while (deleted == false)

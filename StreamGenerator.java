@@ -11,9 +11,9 @@ public class StreamGenerator
    Queue modQueue = null; // first modification queue: one heap, three doctors
    
    // three queues for three heaps, three doctors modification
-   Queue redQueue = null;
-   Queue yellowQueue = null;
-   Queue greenQueue = null;
+   Queue redQueue = new Queue();
+   Queue yellowQueue = new Queue();
+   Queue greenQueue = new Queue();
    
    // method to make the queue
    public void createQueue()
@@ -75,41 +75,24 @@ public class StreamGenerator
       Patient[] clone = patientQueue.clonePatients();
       modQueue = new Queue(clone, 10);
       
-      // take this copy and split into three different queues
-      int r = 0;
-      Patient[] redArray = new Patient[10];
-      
-      int y = 0;
-      Patient[] yellowArray = new Patient[10];
-      
-      int g = 0;
-      Patient[] greenArray = new Patient[10];
-      
-      // so for every item in the clone, find its colour and put it into an array for that colour
+      // so for every item in the clone, find its colour and insert it into a queue for that colour
+      // the code below ensures it is inserted such that it keeps its binary heap structure and order
+      // the heaps don't change in the previous modifications so we don't need to look at structure and order again
       for (int i = 0; i <= 9; i++)
       {
          if (clone[i].getColour() == "RED")
          {
-            redArray[r] = clone[i];
-            r += 1;
+            redQueue.insertPatient(clone[i]);
          }
          else if (clone[i].getColour() == "YELLOW")
          {
-            yellowArray[y] = clone[i];
-            y += 1;
+            yellowQueue.insertPatient(clone[i]);
          }
          else
          {
-            greenArray[g] = clone[i];
-            g += 1;
+            greenQueue.insertPatient(clone[i]);
          }
-      }
-      
-      // create instances of these three queues using the arrays generated above 
-      redQueue = new Queue(redArray, r);
-      yellowQueue = new Queue(yellowArray, y);
-      greenQueue = new Queue(greenArray, g);
-      
+      }      
    }
    
    public void treatPatients()
@@ -155,7 +138,9 @@ public class StreamGenerator
       }
       
       // THREE HEAPS, THREE DOCTORS
-      // treats the most immediate three patients (batch may branch over multiple heaps
+      // treats the most immediate three patients (batch may branch over multiple heaps)
+      // we would do this by iterating three nodes from the red heap then the yellow heap then the green heap
+      // trivial to include this in the code when the results won't differ from one heap, three doctors
    }
    
    public String getName(int index, String searchFile)
