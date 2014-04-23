@@ -42,6 +42,39 @@ public class Queue
       spotsFilled += 1;
    }
    
+   public void insertAtPosition(Patient newPerson, int position)
+   {
+      // method to queue patients 
+      // binary heap, array implementation
+      
+      boolean inserted = false;
+      int parentIndex;
+      int childIndex = position; // child (patient to be re-queued) enters where gap is (this given as input)
+      Patient parent = null;
+      int urgency = newPerson.getUrgency();
+      
+      // inserts at given index then percolates up
+      while (inserted == false)
+      {
+         parentIndex = (int) Math.floor((childIndex-1)/2); // works out where parent is located in the array
+         parent = patientQueue[parentIndex];
+         
+         // if the inserted patient is more urgent than it's current parent, percolate up         
+         if (urgency < parent.getUrgency())
+         {
+            patientQueue[parentIndex] = newPerson;
+            patientQueue[childIndex] = parent;
+            childIndex = parentIndex;
+         }
+         // inserted patient is less urgent than parent or of equal urgency; stay where it is
+         else
+         {
+            patientQueue[childIndex] = newPerson;
+            inserted = true;
+         }
+      }
+   }
+   
    // creates duplicate of the same heap
    public Patient[] clonePatients()
    {
@@ -63,7 +96,7 @@ public class Queue
       int rightIndex;
       Patient lastEntry = patientQueue[(spotsFilled - 1)];
       
-      /**
+      
       // printing output
       String name = patientQueue[0].getName();
       String surname = patientQueue[0].getSurname();
@@ -74,7 +107,6 @@ public class Queue
       System.out.println(".......................................................................");
       //System.out.println("Now treating Patient ID "+ID+": "+name+" "+surname+". Code: "+colour+".");
       System.out.println("Now treating Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
-      System.out.println("In the queue:");
       
       for (int i = 1; i <= (spotsFilled - 1); i++)
       {
@@ -87,7 +119,7 @@ public class Queue
          System.out.println((i)+". Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
       }
       System.out.println("The doctor(s) will see to you shortly.\n");
-      System.out.println(".......................................................................");**/
+      System.out.println(".......................................................................");
       
       // while the deletion process has not completed (completion decided when we reach a node with no children)
       while (deleted == false)
@@ -156,7 +188,8 @@ public class Queue
                {
                   // not root but not where the rightmost node is
                   // the rightmost node now needs to be moved here to maintain binary heap structure
-                  patientQueue[parentIndex] = lastEntry;
+                  // this shifting satifies the condition that it is filled from left to right but may disrupt order property
+                  insertAtPosition(lastEntry, parentIndex);
                   patientQueue[(spotsFilled-1)] = null;
                   deleted = true;
                }
