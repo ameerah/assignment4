@@ -5,7 +5,7 @@ import java.lang.Math;
 public class Queue
 {
    Patient[] patientQueue;
-   static int spotsFilled = 0; // counts how many non-empty Patient items there are in the array; initialised at zero since nobody is added yet
+   int spotsFilled = 0; // counts how many non-empty Patient items there are in the array; initialised at zero since nobody is added yet
    
    public void insertPatient(Patient newPerson)
    {
@@ -104,11 +104,11 @@ public class Queue
       int urgency = patientQueue[0].getUrgency();
       String colour = patientQueue[0].getColour();
       
-      System.out.println(".......................................................................");
+      //System.out.println(".......................................................................");
       //System.out.println("Now treating Patient ID "+ID+": "+name+" "+surname+". Code: "+colour+".");
       System.out.println("Now treating Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
       
-      for (int i = 1; i <= (spotsFilled - 1); i++)
+      /**for (int i = 1; i <= (spotsFilled - 1); i++)
       {
          name = patientQueue[i].getName();
          surname = patientQueue[i].getSurname();
@@ -118,8 +118,8 @@ public class Queue
          
          System.out.println((i)+". Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
       }
-      System.out.println("The doctor(s) will see to you shortly.\n");
-      System.out.println(".......................................................................");
+      System.out.println("The doctor(s) will see to you shortly.\n");**/
+      //System.out.println(".......................................................................");
       
       // while the deletion process has not completed (completion decided when we reach a node with no children)
       while (deleted == false)
@@ -198,6 +198,42 @@ public class Queue
       }
       
       spotsFilled = spotsFilled - 1;
+   }
+   
+   public void printWaitlist(int numDoctors)
+   {
+      // printing output
+      String name;
+      String surname;
+      long ID;
+      int urgency;
+      String colour;
+      
+      if (numDoctors == 3)
+      {
+         System.out.println("Could the above please proceed to Doctors Smith, Raj and Pieters respectively.\n\n");
+      }
+      else
+      {
+         System.out.println("Please go to Dr Smith's room.\n\n");
+      }
+      
+      System.out.println("Those still waiting to be seen to are:");
+      
+      int i = 0;
+      while (patientQueue[i] != null)
+      {
+         name = patientQueue[i].getName();
+         surname = patientQueue[i].getSurname();
+         ID = patientQueue[i].getID();
+         urgency = patientQueue[i].getUrgency();
+         colour = patientQueue[i].getColour();
+         
+         System.out.println((i+1)+". Patient ID: "+ID+" - "+name+" "+surname+"; Code: "+colour+"; urgency: "+urgency);
+         
+         i += 1;
+      }
+      System.out.println("The doctor(s) will see to you shortly.\n");
    }
    
    // constructors   

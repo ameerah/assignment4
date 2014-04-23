@@ -63,6 +63,9 @@ public class StreamGenerator
          // inserts person into binary heap (queue)
          patientQueue.insertPatient(person);
       }
+      
+      // now the initial queue is formed, we can create the ones for the mods
+      generateAdditionalQueues();
    }
    
    public void generateAdditionalQueues()
@@ -92,12 +95,12 @@ public class StreamGenerator
          }
          else if (clone[i].getColour() == "YELLOW")
          {
-            yellowArray[r] = clone[i];
+            yellowArray[y] = clone[i];
             y += 1;
          }
          else
          {
-            greenArray[r] = clone[i];
+            greenArray[g] = clone[i];
             g += 1;
          }
       }
@@ -112,11 +115,47 @@ public class StreamGenerator
    public void treatPatients()
    {
       // calls a "treatPatient()" method which deletes one singular patient
-      // iterates deletes every person in the list
+      
+      // ONE HEAP, ONE DOCTOR
+      // iterates deletes every person in the list; delay faced after every person
+      System.out.println("Illustration of One Heap / One Doctor method");
       for (int i = 0; i <= 9; i++)
       {
+         System.out.println("_______________________________________________________________________________________________________");
          patientQueue.treatPatient();
+         System.out.println("_______________________________________________________________________________________________________");
+         patientQueue.printWaitlist(1);
+         System.out.println("_______________________________________________________________________________________________________");
+         
+         //create delay here
       }
+      
+      // ONE HEAP, THREE DOCTORS
+      // still iterates through every item, just calls three at a time before treatment "delay" in calling next batch
+      System.out.println("\n\n\nIllustration of One Heap / Three Doctors method");
+      for (int i = 0; i <= 3; i++)
+      {
+         if (i <= 2)
+         {
+            System.out.println("_______________________________________________________________________________________________________");
+            modQueue.treatPatient();
+            modQueue.treatPatient();
+            modQueue.treatPatient();
+            System.out.println("_______________________________________________________________________________________________________");
+            modQueue.printWaitlist(3);
+            System.out.println("_______________________________________________________________________________________________________");
+         }
+         else
+         {
+            modQueue.treatPatient();
+            System.out.println("_______________________________________________________________________________________________________");
+         }
+         
+         // create delay here
+      }
+      
+      // THREE HEAPS, THREE DOCTORS
+      // treats the most immediate three patients (batch may branch over multiple heaps
    }
    
    public String getName(int index, String searchFile)
